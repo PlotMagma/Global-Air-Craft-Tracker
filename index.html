@@ -1,2 +1,181 @@
-<! DOCTYPE html>
-<html lang="en"> <head> <meta charset="UTF-8"> <title> Global Aircraft Tracker </title> </head> <body> <h1> Global Aircraft Tracker </h1><h1> <p>Website pelacak pesawat, versi dasar</p> </h1></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Global Aircraft Tracker</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1220;
+            color: white;
+        }
+
+        header {
+            padding: 20px 15px;
+            background: #111c30;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+            color: #b9c7da;
+            font-size: 14px;
+        }
+
+        .status {
+            margin: 15px;
+            padding: 12px;
+            background: #17263c;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #map {
+            width: 100%;
+            height: 60vh;
+            min-height: 350px;
+            background: #dbeafe;
+        }
+
+        .info {
+            padding: 18px 15px;
+        }
+
+        .info h2 {
+            font-size: 19px;
+            margin-top: 0;
+        }
+
+        .card {
+            padding: 14px;
+            background: #17263c;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .label {
+            color: #a8bdd8;
+            font-size: 13px;
+        }
+
+        .value {
+            margin-top: 6px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        footer {
+            padding: 18px;
+            text-align: center;
+            color: #a8bdd8;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Global Aircraft Tracker</h1>
+        <p>Peta pemantauan penerbangan dunia</p>
+    </header>
+
+    <div class="status" id="status">
+        Memuat peta...
+    </div>
+
+    <div id="map"></div>
+
+    <section class="info">
+        <h2>Informasi Pesawat</h2>
+
+        <div class="card">
+            <div class="label">Status</div>
+            <div class="value" id="aircraft-status">
+                Menunggu pilihan
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="label">Latitude</div>
+            <div class="value" id="latitude">-</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Longitude</div>
+            <div class="value" id="longitude">-</div>
+        </div>
+
+        <p>
+            Pilih penanda pesawat contoh pada peta
+            untuk melihat koordinatnya.
+        </p>
+    </section>
+
+    <footer>
+        Global Aircraft Tracker | Peta oleh OpenStreetMap
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        const statusElement = document.getElementById("status");
+
+        if (typeof L === "undefined") {
+            statusElement.textContent =
+                "Peta gagal dimuat. Periksa koneksi internet.";
+        } else {
+            const map = L.map("map").setView([0, 110], 3);
+
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                    attribution: "&copy; OpenStreetMap contributors",
+                    maxZoom: 19
+                }
+            ).addTo(map);
+
+            statusElement.textContent =
+                "Peta berhasil dimuat. Penanda berikut adalah contoh.";
+
+            const aircraft = L.marker([-6.1256, 106.6559])
+                .addTo(map);
+
+            aircraft.bindPopup(
+                "<b>Pesawat contoh</b><br>" +
+                "Lokasi contoh di sekitar Bandara Soekarno-Hatta."
+            );
+
+            aircraft.on("click", function () {
+                document.getElementById("aircraft-status")
+                    .textContent = "Penanda pesawat contoh";
+
+                document.getElementById("latitude")
+                    .textContent = "-6.1256";
+
+                document.getElementById("longitude")
+                    .textContent = "106.6559";
+            });
+        }
+    </script>
+
+</body>
+</html>
